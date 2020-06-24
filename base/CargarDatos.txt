@@ -1,0 +1,107 @@
+---------CARGAR ESCUELAS----------
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/Escuelas.csv" as d FIELDTERMINATOR ';'
+CREATE (:Escuela {id: d.id, name: d.nombre});
+
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/RelacionesEscuelas.csv" as d FIELDTERMINATOR ';'
+MATCH (ini:Escuela{id:d.ido}),(des:Escuela{id:d.idd})
+CREATE (ini)-[:LINK{cost:toFloat(d.costo)}]->(des);
+
+---------CARGAR ESTIMULACIONES TEMPRANAS----------
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/Estimulacion.csv" as d FIELDTERMINATOR ';'
+CREATE (:Estimacion {id: d.id, name: d.nombre});
+
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/RelacionesEstimulaciones.csv" as d FIELDTERMINATOR ';'
+MATCH (ini:Estimacion{id:d.ido}),(des:Estimacion{id:d.idd})
+CREATE (ini)-[:LINK{cost:toFloat(d.costo)}]->(des);
+
+---------CARGAR HOSPITALES----------
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/Hospitales.csv" as d FIELDTERMINATOR ';'
+CREATE (:Hospital {id: d.id, name: d.nombre});
+
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/RelacionesHospitales.csv" as d FIELDTERMINATOR ';'
+MATCH (ini:Hospital{id:d.ido}),(des:Hospital{id:d.idd})
+CREATE (ini)-[:LINK{cost:toFloat(d.costo)}]->(des);
+
+---------CARGAR CENTROS MEDICOS----------
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/Medicos.csv" as d FIELDTERMINATOR ';'
+CREATE (:Medico {id: d.id, name: d.nombre});
+
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/RelacionesMedicos.csv" as d FIELDTERMINATOR ';'
+MATCH (ini:Medico{id:d.ido}),(des:Medico{id:d.idd})
+CREATE (ini)-[:LINK{cost:toFloat(d.costo)}]->(des);
+
+
+----PARTE DE GUSTAVO
+CALL gds.graph.drop('iglesia')
+
+---------CARGAR Iglesias----------
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/Iglesia.csv" as d FIELDTERMINATOR ';'
+CREATE (:Iglesia {id: d.id, name: d.nombre});
+
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/RelacionIglesias.csv" as d FIELDTERMINATOR ';'
+MATCH (ini:Iglesia{id:d.ido}),(des:Iglesia{id:d.idd})
+CREATE (ini)-[:LINK{cost:toFloat(d.costo)}]->(des);
+-----------------------------------------------
+CALL gds.graph.create('iglesia', 'Iglesia', 'LINK', { relationshipProperties: 'cost' })
+-----------------------------------------------------
+
+
+CALL gds.graph.drop('parque')
+------------CARGAR DATOS DE PARQUES ----------------
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/Parque.csv" as d FIELDTERMINATOR ';'
+CREATE (:Parque {id: d.id, name: d.nombre});
+
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/RelacionParques.csv" as d FIELDTERMINATOR ';'
+MATCH (ini:Parque{id:d.ido}),(des:Parque{id:d.idd})
+CREATE (ini)-[:LINK{cost:toFloat(d.costo)}]->(des);
+
+----------------
+CALL gds.graph.create('parque', 'Parque', 'LINK', { relationshipProperties: 'cost' })
+
+
+
+
+
+
+
+-----LUGARES TURISTICOS
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/LugarTuristico.csv" as d FIELDTERMINATOR ';'
+CREATE (:LugarTuristico {id: d.id, name: d.nombre});
+
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/RelacionesLugarTuristico.csv" as d FIELDTERMINATOR ';'
+MATCH (ini:LugarTuristico{id:d.ido}),(des:LugarTuristico{id:d.idd})
+CREATE (ini)-[:LINK{cost:toFloat(d.costo)}]->(des);
+
+------------------------RELACIONES PERSONAS Y LUGARES TURISTIVOS ------------------------------------- 
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/Personas.csv" as d  FIELDTERMINATOR ';' 
+CREATE (:Persona{ id: d.id, name: d.nombre});  
+
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/RelacionesPersonaLugar.csv" as d FIELDTERMINATOR ';' 
+MATCH (ini:Persona{id:d.id1}),(des:LugarTuristico{id:d.id2})
+CREATE (ini)-[:LIKES]->(des);
+
+---ESCUELAS
+
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/Escuela.csv" as d FIELDTERMINATOR ';'
+CREATE (:Escuela {id: d.id, name: d.nombre});
+
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/RelacionesEscuela.csv" as d FIELDTERMINATOR ';'
+MATCH (ini:Escuela{id:d.ido}),(des:LugarTuristico{id:d.idd})
+CREATE (ini)-[:LINK{cost:toFloat(d.costo)}]->(des);
+
+
+------------------------RELACIONES PERSONAS ESCUELAS -------------------------------------
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/ggual/Desktop/Datos/RelacionesPersonaEscuela.csv" as d FIELDTERMINATOR ';' 
+MATCH (ini:Persona{id:d.id1}),(des:Escuela{id:d.id2})
+CREATE (ini)-[:LIKES]->(des);
+
+
+
+
+
+
+
+
+
+
+
